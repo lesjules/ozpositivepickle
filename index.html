@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>Affirmation Viewer with Music</title>
   <style>
     body {
@@ -72,11 +73,21 @@
     .music-btn {
       background: #4caf50;
     }
-@media only screen and (max-width: 600px) {
-  .cartoon-btn {
-    width: 120px;
-  }
-}
+    .share-btn {
+      background: #b6dd0b; 
+      color: white;
+      box-shadow: 3px 3px 0 #4a148c;
+    }
+
+    .share-btn:hover {
+      transform: scale(1.15) rotate(-5deg);
+    }
+
+ @media only screen and (max-width: 600px) {
+    .cartoon-btn {
+      width: 120px;
+    }
+
   </style>
 </head>
 <body>
@@ -89,10 +100,17 @@
     <img class="logo" src="https://i.imgur.com/Aw3earB.png" alt="OZ Logo">
 
     <!-- Buttons overlay -->
-    <div class="button-container">
-      <button class="cartoon-btn" onclick="showRandomImage()">🔄</button>
-      <button class="cartoon-btn music-btn" onclick="toggleMusic()" id="musicButton">🎵</button>
-    </div>
+<div class="button-container">
+  <button class="cartoon-btn" onclick="showRandomImage()">
+    <i class="fas fa-sync-alt"></i>
+  </button>
+  <button class="cartoon-btn music-btn" onclick="toggleMusic()" id="musicButton">
+    <i class="fas fa-music"></i>
+  </button>
+  <button class="cartoon-btn share-btn" onclick="shareImage()">
+    <i class="fas fa-share-alt"></i>
+  </button>
+</div>
   </div>
 
 
@@ -134,16 +152,31 @@
     const music = document.getElementById("bgMusic");
     const btn = document.getElementById("musicButton");
 
-    function toggleMusic() {
-      musicOn = !musicOn;
-      if (musicOn) {
-        music.play();
-        btn.textContent = "🔇";
-      } else {
-        music.pause();
-        btn.textContent = "🎵";
-      }
-    }
+function toggleMusic() {
+  musicOn = !musicOn;
+  if (musicOn) {
+    music.play();
+    btn.innerHTML = '<i class="fas fa-volume-up"></i>'; // unmuted icon
+  } else {
+    music.pause();
+    btn.innerHTML = '<i class="fas fa-volume-mute"></i>'; // muted icon
+  }
+}
+function shareImage() {
+  const img = document.getElementById("affirmationImage").src;
+
+  if (navigator.share) {
+    navigator.share({
+      title: "My Affirmation",
+      text: "Here’s an affirmation I love 💫",
+      url: img
+    })
+    .then(() => console.log("Shared successfully"))
+    .catch((error) => console.log("Error sharing:", error));
+  } else {
+    alert("Sharing not supported on this browser. Copy the link instead: " + img);
+  }
+}
   </script>
 </body>
 </html>
